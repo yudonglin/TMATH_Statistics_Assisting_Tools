@@ -1,6 +1,6 @@
 import math
 class MathVector:
-    def __init__(self,x,y,z):
+    def __init__(self,x,y,z=0):
         self.x = x
         self.y = y
         self.z = z
@@ -10,11 +10,8 @@ class MathVector:
         return MathVector(self.x+otherVector.x,self.y+otherVector.y,self.z+otherVector.z)
     def __sub__(self,otherVector):
         return MathVector(self.x-otherVector.x,self.y-otherVector.y,self.z-otherVector.z)
-    def __mul__(self,otherVectorOrNum):
-        if isinstance(otherVectorOrNum,MathVector):
-            pass
-        elif isinstance(otherVectorOrNum,int):
-            return MathVector(self.x*otherVectorOrNum,self.y*otherVectorOrNum,self.z*otherVectorOrNum)
+    def dot(self,otherVector):
+        return self.x*otherVector.x+self.y*otherVector.y+self.z*otherVector.z
     def crossProduct(self,otherVector):
         return MathVector(self.y*otherVector.z-self.z*otherVector.y,-1*(self.x*otherVector.z-self.z*otherVector.x),self.x*otherVector.y-self.y*otherVector.x)
     def print_magnitude(self):
@@ -25,10 +22,16 @@ class MathVector:
         return MathVector(self.x,self.y,self.z)
 
 class MathPoint:
-    def __init__(self,x,y,z):
+    def __init__(self,x,y,z=0):
         self.x = x
         self.y = y
         self.z = z
 
+def dotProduct(v1,v2):
+    return v1.dot(v2)
+
 def formVectorsWithTwoPoint(point1,point2):
     return MathVector(point2.x-point1.x,point2.y-point1.y,point2.z-point1.z)
+
+def workDoneBy(force,distance):
+    return force.dot(distance)

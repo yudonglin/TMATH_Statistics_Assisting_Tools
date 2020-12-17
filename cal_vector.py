@@ -1,4 +1,4 @@
-from vector_calculator import MathPoint, MathVector, formVectorsWithTwoPoint
+from vector_calculator import MathPoint, MathVector, formVectorsWithTwoPoint, workDoneBy
 """
 Q = MathVector(0,-1,2)
 R = MathVector(-4,-1,-3)
@@ -14,7 +14,7 @@ crossOfPQ_PR.magnitude()
 a = MathVector(-8,3,-2)
 b = MathVector(-1,7,3 )
 print(a.crossProduct(b))
-"""
+
 P = MathPoint(3,3,-3)
 Q = MathPoint(-1,3,-1)
 R = MathPoint(5,-3,0)
@@ -25,5 +25,16 @@ RQ = formVectorsWithTwoPoint(R,Q)
 
 v = RP.crossProduct(RQ)
 
-print(v.get_magnitude())
-
+P = MathPoint(0,0,0)
+Q = MathPoint(-1,3,-1)
+R = MathPoint(5,-3,0)
+PQ = formVectorsWithTwoPoint(P,Q)
+PR = formVectorsWithTwoPoint(P,R)
+print(PQ)
+print(PR)
+print(PQ.crossProduct(PR))
+"""
+U = MathVector(1,1,0)
+P = MathVector(0,2,0)
+print(U.dot(P))
+print(U.crossProduct(P))
