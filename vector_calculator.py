@@ -1,5 +1,4 @@
 import math
-import fractions
 
 class MathPoint:
     def __init__(self,x,y,z=0):
@@ -35,7 +34,7 @@ class MathVector(MathPoint):
         )
     def dot(self,otherVector):
         return self.x*otherVector.x+self.y*otherVector.y+self.z*otherVector.z
-    def crossProduct(self,otherVector):
+    def cross(self,otherVector):
         return MathVector(
             self.y*otherVector.z-self.z*otherVector.y,
             -1*(self.x*otherVector.z-self.z*otherVector.x),
@@ -58,14 +57,23 @@ class MathVector(MathPoint):
     def copy(self):
         return MathVector(self.x,self.y,self.z)
 
-def dotProduct(v1,v2) -> MathVector:
-    return v1.dot(v2)
+def dotProduct(v1:MathVector,v2:MathVector) -> MathVector: return v1.dot(v2)
+
+def crossProduct(v1:MathVector,v2:MathVector) -> MathVector: return v1.cross(v2)
 
 def formVectorsWithTwoPoint(point1,point2) -> MathVector:
     return MathVector(point2.x-point1.x,point2.y-point1.y,point2.z-point1.z)
 
-def workDoneBy(force,distance) -> float:
-    return force.dot(distance)
+def workDoneBy(force:MathVector,distance:MathVector) -> float: return force.dot(distance)
+
+def findAreaOfTriangleFormBy(P:MathPoint,Q:MathPoint,R:MathPoint) -> float:
+    PQ = formVectorsWithTwoPoint(P,Q)
+    PR = formVectorsWithTwoPoint(P,R)
+    PQR = PQ.cross(PR)
+    return math.sqrt(PQR.magnitude_sqr/4)
+
+def findVolumeOfParallelepipedFormBy(a:MathVector,b:MathVector,c:MathVector):
+    return abs(a.dot(b.cross(c)))
 
 def angleBetween(v1,v2,inDegree=False) -> float:
     if inDegree:
@@ -73,5 +81,4 @@ def angleBetween(v1,v2,inDegree=False) -> float:
     else:
         return math.acos(v1.dot(v2)/v1.magnitude*v2.magnitude)
 
-def projectionOf_u_onto_v(v,u):
-    return v*(dotProduct(u,v)/v.magnitude_sqr)
+def projectionOf_u_onto_v(v:MathVector,u:MathVector) -> MathVector: return v*(dotProduct(u,v)/v.magnitude_sqr)
