@@ -57,7 +57,7 @@ class MathVector(MathPoint):
     def copy(self):
         return MathVector(self.x,self.y,self.z)
 
-def dotProduct(v1:MathVector,v2:MathVector) -> MathVector: return v1.dot(v2)
+def dotProduct(v1:MathVector,v2:MathVector) -> float: return v1.dot(v2)
 
 def crossProduct(v1:MathVector,v2:MathVector) -> MathVector: return v1.cross(v2)
 
@@ -77,8 +77,48 @@ def findVolumeOfParallelepipedFormBy(a:MathVector,b:MathVector,c:MathVector):
 
 def angleBetween(v1,v2,inDegree=False) -> float:
     if inDegree:
-        return math.acos(v1.dot(v2)/v1.magnitude*v2.magnitude)/math.pi*360
+        return math.acos(abs(v1.dot(v2))/math.sqrt(v1.magnitude_sqr*v2.magnitude_sqr))/math.pi*180
     else:
-        return math.acos(v1.dot(v2)/v1.magnitude*v2.magnitude)
+        return math.acos(abs(v1.dot(v2))/math.sqrt(v1.magnitude_sqr*v2.magnitude_sqr))
+
+def find_equation_of_plain(a_vector:MathVector,a_point:MathPoint) -> None:
+    #x值
+    if a_vector.x == 1:
+        x_value = "x"
+    elif a_vector.x == -1:
+        x_value = "-x"
+    elif a_vector.x == 0:
+        x_value = ""
+    else:
+        x_value = "{}x".format(a_vector.x)
+    #y值
+    if a_vector.y == 1:
+        y_value = "+y"
+    elif a_vector.y == -1:
+        y_value = "-y"
+    elif a_vector.y == 0:
+        y_value = ""
+    elif a_vector.y > 1:
+        y_value = "+{}y".format(a_vector.y)
+    else:
+        y_value = "{}y".format(a_vector.y)
+    #z值
+    if a_vector.z == 1:
+        z_value = "+z"
+    elif a_vector.z == -1:
+        z_value = "-z"
+    elif a_vector.z == 0:
+        z_value = ""
+    elif a_vector.z > 1:
+        z_value = "+{}z".format(a_vector.z)
+    else:
+        z_value = "{}z".format(a_vector.z)
+
+    print("{0}{1}{2} = {3}".format(
+        x_value,
+        y_value,
+        z_value,
+        a_vector.x*a_point.x + a_vector.y*a_point.y + a_vector.z*a_point.z)
+    )
 
 def projectionOf_u_onto_v(v:MathVector,u:MathVector) -> MathVector: return v*(dotProduct(u,v)/v.magnitude_sqr)
