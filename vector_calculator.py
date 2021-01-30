@@ -32,6 +32,8 @@ class MathVector(MathPoint):
             self.y * num,
             self.z * num
         )
+    def __eq__(self, o: object) -> bool:
+        return self.x == o.x and self.y == o.y and self.z == o.z
     def dot(self,otherVector):
         return self.x*otherVector.x+self.y*otherVector.y+self.z*otherVector.z
     def cross(self,otherVector):
@@ -121,4 +123,10 @@ def find_equation_of_plain(a_vector:MathVector,a_point:MathPoint) -> None:
         a_vector.x*a_point.x + a_vector.y*a_point.y + a_vector.z*a_point.z)
     )
 
-def projectionOf_u_onto_v(v:MathVector,u:MathVector) -> MathVector: return v*(dotProduct(u,v)/v.magnitude_sqr)
+def vector_projection_of_u_onto_v(u:MathVector,v:MathVector) -> MathVector: return v*(dotProduct(u,v)/v.magnitude_sqr)
+
+def scalar_projection_of_u_onto_v(u:MathVector,v:MathVector) -> float: return dotProduct(u,v)/v.magnitude
+
+v_i = MathVector(1,0,0)
+v_j = MathVector(0,1,0)
+v_k = MathVector(0,0,1)
