@@ -1,19 +1,70 @@
 import math
 
-class MathPoint:
+PIE = math.pi
+
+class RectangularCoordinates:
     def __init__(self,x,y,z=0):
         self.x = x
         self.y = y
         self.z = z
     def __str__(self):
-        return "<{0},{1},{2}>".format(self.x,self.y,self.z)
+        return "({0},{1},{2})".format(self.x,self.y,self.z)
+    def to_spherical(self,decimals=5,positive=True):
+        if round(math.atan(self.y/self.x),10) > 0 or not positive:
+            return SphericalCoordinates(
+                round(math.sqrt(self.x**2+self.y**2+self.z**2),decimals),
+                round(math.atan(self.y/self.x),decimals),
+                round(math.acos(self.z/math.sqrt(self.x**2+self.y**2+self.z**2)),decimals)
+            )
+        else:
+            return SphericalCoordinates(
+                round(math.sqrt(self.x**2+self.y**2+self.z**2),decimals),
+                round(math.atan(self.y/self.x)+math.pi,decimals),
+                round(math.acos(self.z/math.sqrt(self.x**2+self.y**2+self.z**2)),decimals)
+            )
+    def to_cylindrical(self,decimals=5):
+        return CylindricalCoordinates(
+            round(math.sqrt(self.x**2+self.y**2),decimals),
+            round(math.atan(self.y/self.x),decimals),
+            self.z
+        )
+
+class SphericalCoordinates:
+    def __init__(self,p,theta,phi):
+        self.p = p
+        self.theta = theta
+        self.phi = phi
+    def __str__(self):
+        return "({0},{1},{2})".format(self.p,self.theta,self.phi)
+    def to_rectangular(self,decimals=5):
+        return RectangularCoordinates(
+            round(self.p*math.sin(self.phi)*math.cos(self.theta),decimals),
+            round(self.p*math.sin(self.phi)*math.sin(self.theta),decimals),
+            round(self.p*math.cos(self.phi),decimals)
+        )
+
+class CylindricalCoordinates:
+    def __init__(self,r,theta,z):
+        self.r = r
+        self.theta = theta
+        self.z = z
+    def __str__(self):
+        return "({0},{1},{2})".format(self.r,self.theta,self.z)
+    def to_rectangular(self,decimals=5):
+        return RectangularCoordinates(
+            round(self.r*math.cos(self.theta),decimals),
+            round(self.r*math.sin(self.theta),decimals),
+            self.z
+        )
 
 def _coordWithBracket(coord):
     return "{"+str(coord)+"}"
 
-class MathVector(MathPoint):
+class MathVector(RectangularCoordinates):
     def __init__(self,x:float,y:float,z:float=0):
-        MathPoint.__init__(self,x,y,z)
+        RectangularCoordinates.__init__(self,x,y,z)
+    def __str__(self):
+        return "<{0},{1},{2}>".format(self.x,self.y,self.z)
     def __add__(self,otherVector):
         return MathVector(
             self.x + otherVector.x,
@@ -68,7 +119,7 @@ def formVectorsWithTwoPoint(point1,point2) -> MathVector:
 
 def workDoneBy(force:MathVector,distance:MathVector) -> float: return force.dot(distance)
 
-def findAreaOfTriangleFormBy(P:MathPoint,Q:MathPoint,R:MathPoint) -> float:
+def findAreaOfTriangleFormBy(P:RectangularCoordinates,Q:RectangularCoordinates,R:RectangularCoordinates) -> float:
     PQ = formVectorsWithTwoPoint(P,Q)
     PR = formVectorsWithTwoPoint(P,R)
     PQR = PQ.cross(PR)
@@ -83,7 +134,7 @@ def angleBetween(v1,v2,inDegree=False) -> float:
     else:
         return math.acos(abs(v1.dot(v2))/math.sqrt(v1.magnitude_sqr*v2.magnitude_sqr))
 
-def find_equation_of_plain(a_vector:MathVector,a_point:MathPoint) -> None:
+def find_equation_of_plain(a_vector:MathVector,a_point:RectangularCoordinates) -> None:
     #x值
     if a_vector.x == 1:
         x_value = "x"
