@@ -3,6 +3,17 @@ from typing import Union
 
 number = Union[int,float]
 
+class LeastSquaresRegressionFunction:
+    def __init__(self, b0, b1) -> None:
+        self.b0 = b0
+        self.b1 = b1
+    def __str__(self) -> str:
+        return "y = {0} + {1}x".format(round(self.b0, 3), round(self.b1, 3))
+    def analyze_residual(self, x_index, real_y_value):
+        predicted_value = self.b0+x_index*self.b1
+        print("Predicted value: {}".format(round(predicted_value, 3)))
+        print("Residual value: {}".format(round(real_y_value-predicted_value, 3)))
+
 class StatisticsToolKit:
     def __init__(self) -> None:
         pass
@@ -41,7 +52,7 @@ class StatisticsToolKit:
         print("Median 中位数: {}".format(self.get_median_of_sample(samples)))
         print("sample variance: {}".format(sum_of_deviation/(len(samples)-1)))
         print("sample standard deviation: {}".format(round(math.sqrt(sum_of_deviation/(len(samples)-1)), 3)))
-    def analyze_correlation_of_variables(self, explanatory_variables:tuple[number], response_variables:tuple[number]) -> None:
+    def analyze_correlation_of_variables(self, explanatory_variables:tuple[number], response_variables:tuple[number]) -> LeastSquaresRegressionFunction:
         if len(explanatory_variables) != len(response_variables):
             raise Exception("Lengths of two samples do not match")
         else:
@@ -67,6 +78,14 @@ class StatisticsToolKit:
         standard_deviation_y = math.sqrt(sum_of_standard_deviation_y/(len_of_samples-1))
         print("Standard deviation of y: {}".format(round(standard_deviation_y, 3)))
         correlation = sum_of_deviation_xy/((len_of_samples-1)*standard_deviation_x*standard_deviation_y)
-        print("Correlation: {}".format(round(correlation,3)))
+        print("Correlation: {}".format(round(correlation, 3)))
+        b1 = correlation*standard_deviation_y/standard_deviation_x
+        print("Slope: {}".format(round(b1, 3)))
+        b0 = mean_of_response_variables-b1*mean_of_explanatory_variables
+        print("Y-intercept: {}".format(round(b0, 3)))
+        function_of_data = LeastSquaresRegressionFunction(b0, b1)
+        print("Function for the line of least squares regression: {}".format(function_of_data))
+        print("R-Squared: {}".format(round(correlation**2, 3)))
+        return function_of_data
 
 Statistics = StatisticsToolKit()
