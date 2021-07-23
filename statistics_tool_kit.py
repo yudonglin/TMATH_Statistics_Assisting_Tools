@@ -10,7 +10,12 @@ class LeastSquaresRegressionFunction:
         self.b1 = b1
 
     def __str__(self) -> str:
-        return "y = {0} + {1}x".format(round(self.b0, 5), round(self.b1, 5))
+        if self.b1 > 0:
+            return "y = {0} + {1}x".format(round(self.b0, 3), round(self.b1, 3))
+        elif self.b1 < 0:
+            return "y = {0} - {1}x".format(round(self.b0, 3), abs(round(self.b1, 3)))
+        else:
+            return "y = {}".format(round(self.b0, 3))
 
     def analyze_residual(self, x_index, real_y_value):
         predicted_value = self.b0 + x_index * self.b1
@@ -19,7 +24,7 @@ class LeastSquaresRegressionFunction:
 
 
 def create_least_squares_regression_function(r, mean_x, mean_y, Sx, Sy):
-    return LeastSquaresRegressionFunction(Sy / Sx * r, mean_y - Sy / Sx * r * mean_x)
+    return LeastSquaresRegressionFunction(mean_y - Sy / Sx * r * mean_x, Sy / Sx * r)
 
 
 class StatisticsToolKit:
@@ -68,7 +73,7 @@ class StatisticsToolKit:
         print(
             "Range of valid sample: [{0}, {1}], as a result...".format(
                 round(first_quartile - 1.5 * (third_quartile - first_quartile), 5),
-                round(third_quartile + 1.5 * (third_quartile - first_quartile)),
+                round(third_quartile + 1.5 * (third_quartile - first_quartile), 5),
             )
         )
         outliers = []
@@ -127,6 +132,7 @@ class StatisticsToolKit:
             sum_of_standard_deviation_x += deviation_x ** 2
             sum_of_standard_deviation_y += deviation_y ** 2
             sum_of_deviation_xy += deviation_x * deviation_y
+        print(sum_of_deviation_xy)
         standard_deviation_x = math.sqrt(sum_of_standard_deviation_x / (len_of_samples - 1))
         print("Standard deviation of x: {}".format(round(standard_deviation_x, 3)))
         standard_deviation_y = math.sqrt(sum_of_standard_deviation_y / (len_of_samples - 1))
