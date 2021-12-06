@@ -17,7 +17,9 @@ b = MathVector(3, -2, -4)
 print(vector_projection_of_u_onto_v(a, b))
 
 # distance1
-pq = formVectorsWithTwoPoint(RectangularCoordinates(8, -9, 3), RectangularCoordinates(0, -8, -9))
+pq = formVectorsWithTwoPoint(
+    RectangularCoordinates(8, -9, 3), RectangularCoordinates(0, -8, -9)
+)
 v = MathVector(-1, 3, 4)
 crossTmp = crossProduct(pq, v)
 print(abs(crossTmp.magnitude) / abs(v.magnitude))

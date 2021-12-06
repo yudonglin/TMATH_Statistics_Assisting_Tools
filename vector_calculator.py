@@ -17,18 +17,30 @@ class RectangularCoordinates:
             return SphericalCoordinates(
                 round(math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2), decimals),
                 round(math.atan(self.y / self.x), decimals),
-                round(math.acos(self.z / math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)), decimals),
+                round(
+                    math.acos(
+                        self.z / math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+                    ),
+                    decimals,
+                ),
             )
         else:
             return SphericalCoordinates(
                 round(math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2), decimals),
                 round(math.atan(self.y / self.x) + math.pi, decimals),
-                round(math.acos(self.z / math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)), decimals),
+                round(
+                    math.acos(
+                        self.z / math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+                    ),
+                    decimals,
+                ),
             )
 
     def to_cylindrical(self, decimals=5):
         return CylindricalCoordinates(
-            round(math.sqrt(self.x ** 2 + self.y ** 2), decimals), round(math.atan(self.y / self.x), decimals), self.z
+            round(math.sqrt(self.x ** 2 + self.y ** 2), decimals),
+            round(math.atan(self.y / self.x), decimals),
+            self.z,
         )
 
 
@@ -60,7 +72,9 @@ class CylindricalCoordinates:
 
     def to_rectangular(self, decimals=5):
         return RectangularCoordinates(
-            round(self.r * math.cos(self.theta), decimals), round(self.r * math.sin(self.theta), decimals), self.z
+            round(self.r * math.cos(self.theta), decimals),
+            round(self.r * math.sin(self.theta), decimals),
+            self.z,
         )
 
 
@@ -76,10 +90,14 @@ class MathVector(RectangularCoordinates):
         return "<{0},{1},{2}>".format(self.x, self.y, self.z)
 
     def __add__(self, otherVector):
-        return MathVector(self.x + otherVector.x, self.y + otherVector.y, self.z + otherVector.z)
+        return MathVector(
+            self.x + otherVector.x, self.y + otherVector.y, self.z + otherVector.z
+        )
 
     def __sub__(self, otherVector):
-        return MathVector(self.x - otherVector.x, self.y - otherVector.y, self.z - otherVector.z)
+        return MathVector(
+            self.x - otherVector.x, self.y - otherVector.y, self.z - otherVector.z
+        )
 
     def __mul__(self, num: int):
         return MathVector(self.x * num, self.y * num, self.z * num)
@@ -103,7 +121,10 @@ class MathVector(RectangularCoordinates):
     def print_unit_vector(self):
         print(
             "<\\frac{1}{0}, \\frac{2}{0}, \\frac{3}{0}>".format(
-                self.magnitude_format, _coordWithBracket(self.x), _coordWithBracket(self.y), _coordWithBracket(self.z)
+                self.magnitude_format,
+                _coordWithBracket(self.x),
+                _coordWithBracket(self.y),
+                _coordWithBracket(self.z),
             )
         )
 
@@ -139,7 +160,9 @@ def workDoneBy(force: MathVector, distance: MathVector) -> float:
     return force.dot(distance)
 
 
-def findAreaOfTriangleFormBy(P: RectangularCoordinates, Q: RectangularCoordinates, R: RectangularCoordinates) -> float:
+def findAreaOfTriangleFormBy(
+    P: RectangularCoordinates, Q: RectangularCoordinates, R: RectangularCoordinates
+) -> float:
     PQ = formVectorsWithTwoPoint(P, Q)
     PR = formVectorsWithTwoPoint(P, R)
     PQR = PQ.cross(PR)
@@ -152,12 +175,20 @@ def findVolumeOfParallelepipedFormBy(a: MathVector, b: MathVector, c: MathVector
 
 def angleBetween(v1, v2, inDegree=False) -> float:
     if inDegree:
-        return math.acos(abs(v1.dot(v2)) / math.sqrt(v1.magnitude_sqr * v2.magnitude_sqr)) / math.pi * 180
+        return (
+            math.acos(abs(v1.dot(v2)) / math.sqrt(v1.magnitude_sqr * v2.magnitude_sqr))
+            / math.pi
+            * 180
+        )
     else:
-        return math.acos(abs(v1.dot(v2)) / math.sqrt(v1.magnitude_sqr * v2.magnitude_sqr))
+        return math.acos(
+            abs(v1.dot(v2)) / math.sqrt(v1.magnitude_sqr * v2.magnitude_sqr)
+        )
 
 
-def find_equation_of_plain(a_vector: MathVector, a_point: RectangularCoordinates) -> None:
+def find_equation_of_plain(
+    a_vector: MathVector, a_point: RectangularCoordinates
+) -> None:
     # x值
     if a_vector.x == 1:
         x_value = "x"
@@ -192,7 +223,10 @@ def find_equation_of_plain(a_vector: MathVector, a_point: RectangularCoordinates
 
     print(
         "{0}{1}{2} = {3}".format(
-            x_value, y_value, z_value, a_vector.x * a_point.x + a_vector.y * a_point.y + a_vector.z * a_point.z
+            x_value,
+            y_value,
+            z_value,
+            a_vector.x * a_point.x + a_vector.y * a_point.y + a_vector.z * a_point.z,
         )
     )
 
