@@ -16,17 +16,9 @@ class Person:
 
     def __predict(self):
         self.guess_time = (
-            math.sqrt(
-                self.initial_speed * self.initial_speed
-                + 2 * self.acceleration * self.distance
-            )
-            - self.initial_speed
+            math.sqrt(self.initial_speed * self.initial_speed + 2 * self.acceleration * self.distance) - self.initial_speed
         ) / self.acceleration
-        print(
-            "Computer predicts that {0} will be there in {1}s.".format(
-                self.name, round(self.guess_time, 3)
-            )
-        )
+        print("Computer predicts that {0} will be there in {1}s.".format(self.name, round(self.guess_time, 3)))
 
     def cal_position(self, t):
         return self.initial_speed * t + 0.5 * self.acceleration * t * t
@@ -48,32 +40,16 @@ def compare(person1, person2):
         if MovePerson1 == False and MovePerson2 == False:
             pass
         elif MovePerson1 == True and MovePerson2 == True:
-            print(
-                "{0} and {1} get there almost the same time in around {2}s!".format(
-                    person1.name, person2.name, person2.time
-                )
-            )
+            print("{0} and {1} get there almost the same time in around {2}s!".format(person1.name, person2.name, person2.time))
             name = None
             if person1.guess_time < person2.guess_time:
-                print(
-                    "But based on the calculation, {} should get there first.".format(
-                        person1.name
-                    )
-                )
+                print("But based on the calculation, {} should get there first.".format(person1.name))
             elif person1.guess_time > person2.guess_time:
-                print(
-                    "But based on the calculation, {} should get there first.".format(
-                        person2.name
-                    )
-                )
+                print("But based on the calculation, {} should get there first.".format(person2.name))
             break
         elif MovePerson1 == True:
-            print(
-                "{0} get there first in around {1}s!".format(person1.name, person1.time)
-            )
+            print("{0} get there first in around {1}s!".format(person1.name, person1.time))
             break
         elif MovePerson2 == True:
-            print(
-                "{0} get there first in around {1}s!".format(person2.name, person2.time)
-            )
+            print("{0} get there first in around {1}s!".format(person2.name, person2.time))
             break
