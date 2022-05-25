@@ -1,3 +1,6 @@
+# test sample with no standard deviation
+t.test(y, mu=, alternative="")
+
 findStandardizedTestStatistic <- function (sample_x_mean, u_mean, sd, n, round_to = 2) {
     print(round((sample_x_mean - u_mean) / sd * sqrt(n), round_to))
 }
@@ -35,58 +38,54 @@ findPUsingZ <- function (which_taile, z, round_to = 4, a = -1) {
     return (p)
 }
 
-analyzeClaimWithKnownSD <- function (how, num, sample_x_mean, u_mean, sd, n, alpha, round_to = 4) {
-    z = (sample_x_mean - u_mean) / sd * sqrt(n)
-    print(sprintf("z = %s", round(z, round_to)))
-    if (how == "<=") {
-        print(sprintf("H0: <= %s (claim)", num))
-        print(sprintf("HA: > %s", num))
-        if (findPUsingZ("r", z, round_to) < alpha) {
-            print("Reject H0 as well as the claim")
+comparePWithAlpha <- function (p, alpha, isClaimH0) {
+    if (isClaimH0 == 0) {
+        if (p < alpha) {
+            print("Reject H0, and there is enough evidence to reject the claim.")
         } else {
-            print("Fail to reject H0 as well as the claim")
+            print("Fail to reject H0, and there is not enough evidence to reject the claim.")
         }
-    } else if (how == ">=") {
-        print(sprintf("H0: >= %s (claim)", num))
-        print(sprintf("HA: < %s", num))
-        if (findPUsingZ("l", z, round_to) < alpha) {
-            print("Reject H0 as well as the claim")
-        } else {
-            print("Fail to reject H0 as well as the claim")
-        }
-    } else if (how == "==") {
-        print(sprintf("H0: == %s (claim)", num))
-        print(sprintf("HA: != %s", num))
-        if (findPUsingZ("t", z, round_to) < alpha) {
-            print("Reject H0 as well as the claim")
-        } else {
-            print("Fail to reject H0 as well as the claim")
-        }
-    } else if (how == "<") {
-        print(sprintf("H0: >= %s", num))
-        print(sprintf("HA: < %s (claim)", num))
-        if (findPUsingZ("l", z, round_to) < alpha) {
-            print("Reject H0, but support the claim")
-        } else {
-            print("Fail to reject H0, and there is not enough evidence to support the claim.")
-        }
-    } else if (how == ">") {
-        print(sprintf("H0: <= %s", num))
-        print(sprintf("HA: > %s (claim)", num))
-        if (findPUsingZ("r", z, round_to) < alpha) {
-            print("Reject H0, but support the claim")
-        } else {
-            print("Fail to reject H0, and there is not enough evidence to support the claim.")
-        }
-    } else if (how == "!=") {
-        print(sprintf("H0: == %s", num))
-        print(sprintf("HA: != %s (claim)", num))
-        if (findPUsingZ("t", z, round_to) < alpha) {
-            print("Reject H0, but support the claim")
+    } else {
+        if (p < alpha) {
+            print("Reject H0, so there is enough evidence to support the claim.")
         } else {
             print("Fail to reject H0, and there is not enough evidence to support the claim.")
         }
     }
+}
+
+analyzeClaimWithKnownSD <- function (how, u_mean, sample_x_mean, population_sd, n, alpha, round_to = 4) {
+    z = (sample_x_mean - u_mean) / population_sd * sqrt(n)
+    print(sprintf("standardized test statistic - z = %s", round(z, round_to)))
+    if (how == "<=") {
+        print(sprintf("H0: <= %s (claim)", u_mean))
+        print(sprintf("HA: > %s", u_mean))
+        comparePWithAlpha(findPUsingZ("r", z, round_to), alpha, 0)
+    } else if (how == ">=") {
+        print(sprintf("H0: >= %s (claim)", u_mean))
+        print(sprintf("HA: < %s", u_mean))
+        comparePWithAlpha(findPUsingZ("l", z, round_to), alpha, 0)
+    } else if (how == "==") {
+        print(sprintf("H0: == %s (claim)", u_mean))
+        print(sprintf("HA: != %s", u_mean))
+        comparePWithAlpha(findPUsingZ("t", z, round_to), alpha, 0)
+    } else if (how == ">") {
+        print(sprintf("H0: <= %s", u_mean))
+        print(sprintf("HA: > %s (claim)", u_mean))
+        comparePWithAlpha(findPUsingZ("r", z, round_to), alpha, 1)
+    } else if (how == "<") {
+        print(sprintf("H0: >= %s", u_mean))
+        print(sprintf("HA: < %s (claim)", u_mean))
+        comparePWithAlpha(findPUsingZ("l", z, round_to), alpha, 1)
+    } else if (how == "!=") {
+        print(sprintf("H0: == %s", u_mean))
+        print(sprintf("HA: != %s (claim)", u_mean))
+        comparePWithAlpha(findPUsingZ("t", z, round_to), alpha, 1)
+    }
+}
+
+analyzeClaimWithSampleAndGivenSD <- function (how, u_mean, sample, population_sd, alpha, round_to = 4) {
+    analyzeClaimWithKnownSD(how, u_mean, mean(sample), population_sd, length(sample), alpha, round_to)
 }
 
 findPUsingT <- function (which_taile, t, n, round_to = 4, a = -1) {
@@ -118,56 +117,32 @@ findPUsingT <- function (which_taile, t, n, round_to = 4, a = -1) {
     return (p)
 }
 
-analyzeClaimWithT <- function (how, num, sample_x_mean, u_mean, s, n, alpha, round_to = 4) {
-    t = (sample_x_mean - u_mean) / s * sqrt(n)
-    print(sprintf("t = %s", round(t, round_to)))
+analyzeClaimWithT <- function (how, u_mean, sample_x_mean, sample_sd, n, alpha, round_to = 4) {
+    t = (sample_x_mean - u_mean) / sample_sd * sqrt(n)
+    print(sprintf("standardized test statistic - t = %s", round(t, round_to)))
     if (how == "<=") {
-        print(sprintf("H0: <= %s (claim)", num))
-        print(sprintf("HA: > %s", num))
-        if (findPUsingT("r", t, n, round_to) < alpha) {
-            print("Reject H0 as well as the claim")
-        } else {
-            print("Fail to reject H0 as well as the claim")
-        }
+        print(sprintf("H0: <= %s (claim)", u_mean))
+        print(sprintf("HA: > %s", u_mean))
+        comparePWithAlpha(findPUsingT("r", t, n, round_to), alpha, 0)
     } else if (how == ">=") {
-        print(sprintf("H0: >= %s (claim)", num))
-        print(sprintf("HA: < %s", num))
-        if (findPUsingT("l", t, n, round_to) < alpha) {
-            print("Reject H0 as well as the claim")
-        } else {
-            print("Fail to reject H0 as well as the claim")
-        }
+        print(sprintf("H0: >= %s (claim)", u_mean))
+        print(sprintf("HA: < %s", u_mean))
+        comparePWithAlpha(findPUsingT("l", t, n, round_to), alpha, 0)
     } else if (how == "==") {
-        print(sprintf("H0: == %s (claim)", num))
-        print(sprintf("HA: != %s", num))
-        if (findPUsingT("t", t, n, round_to) < alpha) {
-            print("Reject H0 as well as the claim")
-        } else {
-            print("Fail to reject H0 as well as the claim")
-        }
-    } else if (how == "<") {
-        print(sprintf("H0: >= %s", num))
-        print(sprintf("HA: < %s (claim)", num))
-        if (findPUsingT("l", t, n, round_to) < alpha) {
-            print("Reject H0, but support the claim")
-        } else {
-            print("Fail to reject H0, and there is not enough evidence to support the claim.")
-        }
+        print(sprintf("H0: == %s (claim)", u_mean))
+        print(sprintf("HA: != %s", u_mean))
+        comparePWithAlpha(findPUsingT("t", t, n, round_to), alpha, 0)
     } else if (how == ">") {
-        print(sprintf("H0: <= %s", num))
-        print(sprintf("HA: > %s (claim)", num))
-        if (findPUsingT("r", t, n, round_to) < alpha) {
-            print("Reject H0, but support the claim")
-        } else {
-            print("Fail to reject H0, and there is not enough evidence to support the claim.")
-        }
+        print(sprintf("H0: <= %s", u_mean))
+        print(sprintf("HA: > %s (claim)", u_mean))
+        comparePWithAlpha(findPUsingT("r", t, n, round_to), alpha, 1)
+    } else if (how == "<") {
+        print(sprintf("H0: >= %s", u_mean))
+        print(sprintf("HA: < %s (claim)", u_mean))
+        comparePWithAlpha(findPUsingT("l", t, n, round_to), alpha, 1)
     } else if (how == "!=") {
-        print(sprintf("H0: == %s", num))
-        print(sprintf("HA: != %s (claim)", num))
-        if (findPUsingT("t", t, n, round_to) < alpha) {
-            print("Reject H0, but support the claim")
-        } else {
-            print("Fail to reject H0, and there is not enough evidence to support the claim.")
-        }
+        print(sprintf("H0: == %s", u_mean))
+        print(sprintf("HA: != %s (claim)", u_mean))
+        comparePWithAlpha(findPUsingT("t", t, n, round_to), alpha, 1)
     }
 }
