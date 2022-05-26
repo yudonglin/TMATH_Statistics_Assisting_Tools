@@ -88,7 +88,7 @@ analyzeClaimWithSampleAndGivenSD <- function (how, u_mean, sample, population_sd
     analyzeClaimWithKnownSD(how, u_mean, mean(sample), population_sd, length(sample), alpha, round_to)
 }
 
-findPUsingT <- function (which_taile, t, n, round_to = 4, a = -1) {
+findPUsingTAndN <- function (which_taile, t, n, round_to = 4, a = -1) {
     if (which_taile == "r") {
         print("Right tailed test:")
         p = round(1 - pt(t, n-1), round_to)
@@ -123,26 +123,26 @@ analyzeClaimWithT <- function (how, u_mean, sample_x_mean, sample_sd, n, alpha, 
     if (how == "<=") {
         print(sprintf("H0: <= %s (claim)", u_mean))
         print(sprintf("HA: > %s", u_mean))
-        comparePWithAlpha(findPUsingT("r", t, n, round_to), alpha, 0)
+        comparePWithAlpha(findPUsingTAndN("r", t, n, round_to), alpha, 0)
     } else if (how == ">=") {
         print(sprintf("H0: >= %s (claim)", u_mean))
         print(sprintf("HA: < %s", u_mean))
-        comparePWithAlpha(findPUsingT("l", t, n, round_to), alpha, 0)
+        comparePWithAlpha(findPUsingTAndN("l", t, n, round_to), alpha, 0)
     } else if (how == "==") {
         print(sprintf("H0: == %s (claim)", u_mean))
         print(sprintf("HA: != %s", u_mean))
-        comparePWithAlpha(findPUsingT("t", t, n, round_to), alpha, 0)
+        comparePWithAlpha(findPUsingTAndN("t", t, n, round_to), alpha, 0)
     } else if (how == ">") {
         print(sprintf("H0: <= %s", u_mean))
         print(sprintf("HA: > %s (claim)", u_mean))
-        comparePWithAlpha(findPUsingT("r", t, n, round_to), alpha, 1)
+        comparePWithAlpha(findPUsingTAndN("r", t, n, round_to), alpha, 1)
     } else if (how == "<") {
         print(sprintf("H0: >= %s", u_mean))
         print(sprintf("HA: < %s (claim)", u_mean))
-        comparePWithAlpha(findPUsingT("l", t, n, round_to), alpha, 1)
+        comparePWithAlpha(findPUsingTAndN("l", t, n, round_to), alpha, 1)
     } else if (how == "!=") {
         print(sprintf("H0: == %s", u_mean))
         print(sprintf("HA: != %s (claim)", u_mean))
-        comparePWithAlpha(findPUsingT("t", t, n, round_to), alpha, 1)
+        comparePWithAlpha(findPUsingTAndN("t", t, n, round_to), alpha, 1)
     }
 }

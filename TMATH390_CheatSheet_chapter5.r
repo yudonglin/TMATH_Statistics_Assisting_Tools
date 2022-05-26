@@ -1,3 +1,9 @@
+"""
+CV - critical value / confidence interval. 
+"""
+
+# Find z critical value according to the cumulative area:
+qnorm(cv + (1 - cv) /2)
 
 # ----- Use the normal distribution to approximate the binomial distribution -----
 

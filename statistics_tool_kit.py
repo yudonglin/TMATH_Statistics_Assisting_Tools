@@ -131,8 +131,8 @@ class StatisticsToolKit:
         for i in range(len(explanatory_variables)):
             deviation_x = explanatory_variables[i] - mean_of_explanatory_variables
             deviation_y = response_variables[i] - mean_of_response_variables
-            sum_of_standard_deviation_x += deviation_x ** 2
-            sum_of_standard_deviation_y += deviation_y ** 2
+            sum_of_standard_deviation_x += deviation_x**2
+            sum_of_standard_deviation_y += deviation_y**2
             sum_of_deviation_xy += deviation_x * deviation_y
         print(sum_of_deviation_xy)
         standard_deviation_x = math.sqrt(sum_of_standard_deviation_x / (len_of_samples - 1))
@@ -147,7 +147,7 @@ class StatisticsToolKit:
         print("Y-intercept: {}".format(round(b0, 3)))
         function_of_data = LeastSquaresRegressionFunction(b0, b1)
         print("Function for the line of least squares regression: {}".format(function_of_data))
-        print("R-Squared: {}".format(round(correlation ** 2, 3)))
+        print("R-Squared: {}".format(round(correlation**2, 3)))
         return function_of_data
 
 

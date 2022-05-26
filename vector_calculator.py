@@ -15,20 +15,20 @@ class RectangularCoordinates:
     def to_spherical(self, decimals=5, positive=True):
         if round(math.atan(self.y / self.x), 10) > 0 or not positive:
             return SphericalCoordinates(
-                round(math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2), decimals),
+                round(math.sqrt(self.x**2 + self.y**2 + self.z**2), decimals),
                 round(math.atan(self.y / self.x), decimals),
-                round(math.acos(self.z / math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)), decimals),
+                round(math.acos(self.z / math.sqrt(self.x**2 + self.y**2 + self.z**2)), decimals),
             )
         else:
             return SphericalCoordinates(
-                round(math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2), decimals),
+                round(math.sqrt(self.x**2 + self.y**2 + self.z**2), decimals),
                 round(math.atan(self.y / self.x) + math.pi, decimals),
-                round(math.acos(self.z / math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)), decimals),
+                round(math.acos(self.z / math.sqrt(self.x**2 + self.y**2 + self.z**2)), decimals),
             )
 
     def to_cylindrical(self, decimals=5):
         return CylindricalCoordinates(
-            round(math.sqrt(self.x ** 2 + self.y ** 2), decimals), round(math.atan(self.y / self.x), decimals), self.z
+            round(math.sqrt(self.x**2 + self.y**2), decimals), round(math.atan(self.y / self.x), decimals), self.z
         )
 
 
@@ -98,7 +98,7 @@ class MathVector(RectangularCoordinates):
         )
 
     def print_magnitude(self):
-        print("√" + str(self.x ** 2 + self.y ** 2 + self.z ** 2))
+        print("√" + str(self.x**2 + self.y**2 + self.z**2))
 
     def print_unit_vector(self):
         print(
@@ -109,11 +109,11 @@ class MathVector(RectangularCoordinates):
 
     @property
     def magnitude(self):
-        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     @property
     def magnitude_sqr(self):
-        return self.x ** 2 + self.y ** 2 + self.z ** 2
+        return self.x**2 + self.y**2 + self.z**2
 
     @property
     def magnitude_format(self):
